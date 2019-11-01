@@ -8,13 +8,20 @@ import os
 import time
 import csv
 import datetime
-from constants import *
+from constants import * #gets constants 
+
+#This takes an image and determines whether there is a green bug within them
+#Then if there is a bug, returns the image but with a red box around the bug
+#Records any bugs found, with date and time in csv file.
+
 
 start = time.time()
 os.system("fswebcam -r 240x120 --no-banner image.jpg")
+#Takes an image with an attached camera and records the time
 
 end = time.time()
 print(end-start, "taken image")
+#Records how long it took to take the image
 
 
 end = time.time()
@@ -29,15 +36,18 @@ picarray = numpy.array(im)
 
 end = time.time()
 print(end-start, "import array")
+#Regularly prints out to the console how long each stage takes
 
-pix1 = 0
-pix2 = 0
-pix3 = 0
+centrex = 0 	#the x location of the centre of the bug
+centrey = 0	#the y location of the centre of the bug
+num = 0		#
 
-centrex = 0
-centrey = 0
-num = 0
 
+#As this is all running on a raspberry Pi there is almost no processing power
+#Processing the entire image takes far too long
+#Instead this looks at a fraction of the image
+#Finds the pixels that are the right colour  and adjusts the expected centre
+#Works very well as long as there isn't much green in the background
 for x in range(picarray.shape[0]/5):
    for y in range(picarray.shape[1]/5):
        red, green, blue = picarray[x*5,y*5]
@@ -47,11 +57,12 @@ for x in range(picarray.shape[0]/5):
 	   num += 1
 
 end = time.time()
-
-end = time.time()
 print(end-start, "post main loop")
 print(num)
 
+#If there is a certain threshold passed, there is a bug found
+#Then a red box is drawn around the expected location
+#And a new image is returned
 if (num > 20):
 	centrex = centrex/(num) #div by zero, no green pixels recognised!
 	centrey = centrey/(num)
