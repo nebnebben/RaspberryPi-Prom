@@ -96,9 +96,11 @@ if (num > 20):
 	    spamwriter = csv.writer(csvfile, delimiter=' ',
 		                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
 	    spamwriter.writerow([momentofcapture, 'Image'])
+	#Writes time, date of image captured to file
 	
 	
 	os.system("convert altim.jpg -compress none image.ppm")
+	#writes new file with bug detected to file
 	print("Image: Cockroach Detected")
 else:
 	print("Nothing found")
